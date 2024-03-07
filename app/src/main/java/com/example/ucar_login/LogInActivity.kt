@@ -21,12 +21,13 @@ class LogInActivity : AppCompatActivity() {
 
         //LOGIN GOOGLE
         binding.btnLoginGoogle.setOnClickListener {
-            // MARCO AÑADE FUNCION!!------------------------------------------------------------------------------------------------------------
+            val intent = Intent(this, AuthenticationActivity::class.java)
+            startActivity(intent)
         }
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
-            // MARCO AÑADE FUNCION!!------------------------------------------------------------------------------------------------------------
-        }
+            val intent = Intent(this, AuthenticationActivity::class.java)
+            startActivity(intent)        }
         //LOGIN MANUAL
         binding.btnLoginManual.setOnClickListener {
             val intent = Intent(this, AuthenticationActivity::class.java)

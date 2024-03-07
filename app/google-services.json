@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "504424914935",
+    "project_id": "ucarloggin",
+    "storage_bucket": "ucarloggin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504424914935:android:acb1c992d79123f6d698f2",
+        "android_client_info": {
+          "package_name": "com.example.ucar_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxy3LO5VOahNjkgAaYAyOgs8QehYsGiMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
