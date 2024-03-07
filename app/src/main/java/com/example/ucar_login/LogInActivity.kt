@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.example.ucar_login.databinding.ActivityLogInBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class LogInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLogInBinding
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,7 @@ class LogInActivity : AppCompatActivity() {
         binding.btnLoginGoogle.setOnClickListener {
             val intent = Intent(this, AuthenticationActivity::class.java)
             startActivity(intent)
+
         }
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
