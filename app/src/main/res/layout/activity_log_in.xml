@@ -8,11 +8,8 @@
     tools:context=".LogInActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/background_gradient"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +25,9 @@
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
-            android:src="@drawable/logo_app" />
+            android:contentDescription="@string/todo"
+            android:src="@drawable/logo_app"
+            tools:ignore="ImageContrastCheck" />
 
         <!--SUBTITLE-->
         <TextView
@@ -42,7 +41,8 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
 
         <!--DESCRIPTION-->
         <TextView
@@ -55,7 +55,8 @@
             android:text="@string/description"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck" />
 
         <!--SIGN IN GOOGLE BUTTON-->
         <Button
@@ -125,13 +126,13 @@
             android:layout_marginEnd="60dp"
             android:backgroundTint="#00FFFFFF"
             android:elevation="2dp"
-            android:text="create new account"
+            android:text="@string/create_new_account"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="normal"
             app:cornerRadius="15dp"
             app:strokeColor="#00FFFFFF"
-            />
+            tools:ignore="TextContrastCheck" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

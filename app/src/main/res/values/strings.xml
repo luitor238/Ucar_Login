@@ -54,6 +54,8 @@
     <string name="subtitle4">Do you want to add something to your bibliography? (Optional) </string>
     <string name="bibliography">Bibliography</string>
     <string name="create">CREATE ACCOUNT</string>
+    <string name="todo">TODO</string>
+    <string name="create_new_account">create new account</string>
 
 
 </resources>
