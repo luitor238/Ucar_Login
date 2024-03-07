@@ -5,11 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.example.ucar_login.databinding.ActivityAuthenticationBinding
 
 class AuthenticationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthenticationBinding
+    private lateinit var auth: FirebaseAuth
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +22,8 @@ class AuthenticationActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
 
         //GO BACK BUTTON
         binding.imageBtnGoBack.setOnClickListener {
@@ -28,34 +32,39 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         //LOGIN BUTTON
-        binding.btnLogin.setOnClickListener {
+        try {
+            binding.btnLogin.setOnClickListener {
 
-            if(binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
+                if(binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
 
-                // Añadir comprobaciones de datos introducidos...............................................................................................
+                    // Añadir comprobaciones de datos introducidos...............................................................................................
 
-                logInUser(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString())
+                    auth.signInWithEmailAndPassword(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString())
+                        .addOnCompleteListener(this)
 
-                //val intent = Intent(this, HomeActivity::class.java)
-                //startActivity(intent)
+                    //val intent = Intent(this, HomeActivity::class.java)
+                    //startActivity(intent)
 
-            } else {
-                binding.textViewResult.visibility = View.VISIBLE
-                binding.textViewResult.text = "There cannot be empty fields."
+                } else {
+                    binding.textViewResult.visibility = View.VISIBLE
+                    binding.textViewResult.text = "There cannot be empty fields."
+                }
             }
         }
+        catch (e: Exception) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Error")
+            builder.setMessage("There is a mistake on the athentication")
+            builder.setPositiveButton("OK",null)
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
 
-        //ACTION BUTTON FORGOT PASSWORD
+        //FORGOT PASSWORD BUTTON
         binding.btnForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
 
     }
-
-    //LOG IN FUCTION
-    private fun logInUser (email: String,password: String ){
-        //CREAR FUNCION LOGIN--------------------------------------------------------------------------------------------------------------
-    }
-
 }

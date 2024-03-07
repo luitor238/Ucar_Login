@@ -11,4 +11,5 @@
     <color name="primaryColor">#048DD8</color>
     <color name="secondaryColor">#2AAACA</color>
     <color name="terciaryColor">#00ED9A</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

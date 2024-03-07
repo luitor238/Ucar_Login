@@ -32,7 +32,7 @@ class LogInActivity : AppCompatActivity() {
         }
         //SING IN MANUAL
         binding.btnSingInManual.setOnClickListener {
-            val intent = Intent(this, SingInStep1Activity::class.java)
+            val intent = Intent(this, SignInStep1Activity::class.java)
             startActivity(intent)
         }
     }
