@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="grey">#888888</color>
+    <color name="darkgrey">#4D4D4D</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="iconColor">@color/primaryColor</color>
+    <color name="green">#019A07</color>
+    <color name="warning">#FF0000</color>
+    <color name="blue">#1256DD</color>
+    <color name="primaryColor">#7733EF</color>
+    <color name="secondaryColor">#2AAACA</color>
+    <color name="terciaryColor">#00ED9A</color>
+</resources>
