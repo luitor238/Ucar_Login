@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camara"
-        android:required="true"></uses-feature>
+    <uses-feature
+        android:name="android.hardware.camara"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ucar_Login"
         tools:targetApi="31">
+        <activity
+            android:name=".SignInStep1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AuthenticationActivity"
+            android:exported="false" />
         <activity
             android:name=".LogInActivity"
             android:exported="true">
