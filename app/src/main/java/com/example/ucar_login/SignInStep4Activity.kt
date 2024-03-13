@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
-import com.example.ucar_login.databinding.ActivitySignInStep3Binding
 import com.example.ucar_login.databinding.ActivitySignInStep4Binding
 import java.io.File
 
