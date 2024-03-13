@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageBtnGoBack3"
+                android:id="@+id/imageBtnGoBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
@@ -145,7 +145,7 @@
 
         <!--NEXT BUTTON-->
         <Button
-            android:id="@+id/btnNext3"
+            android:id="@+id/btnNext"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="55dp"
