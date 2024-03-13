@@ -25,29 +25,20 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private var RC_SIGN_IN = 20
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_log_in)
-
         binding = ActivityLogInBinding.inflate(layoutInflater)
         val view = binding.root
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        val gso = GoogleSignIn.getClient(
-            this,
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
-
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-
         setContentView(view)
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         //LOGIN GOOGLE
         binding.btnLoginGoogle.setOnClickListener {
@@ -57,7 +48,8 @@ class LogInActivity : AppCompatActivity() {
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
             val intent = Intent(this, AuthenticationActivity::class.java)
-            startActivity(intent)        }
+            startActivity(intent)
+        }
         //LOGIN MANUAL
         binding.btnLoginManual.setOnClickListener {
             val intent = Intent(this, AuthenticationActivity::class.java)
@@ -69,11 +61,12 @@ class LogInActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    private fun googleSignIn() {
 
-        Intent intent = GoogleSignInClient.getSignInIntent();
-        startActivityForResult(intent,RC_SIGN_IN);
+    private fun googleSignIn() {
+        val intent = googleSignInClient.signInIntent
+        startActivityForResult(intent, RC_SIGN_IN)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -81,13 +74,12 @@ class LogInActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                FirebaseAuth(account?.idToken)
+                account?.idToken?.let { firebaseAuth(it) }
             } catch (e: ApiException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     private fun firebaseAuth(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -108,5 +100,4 @@ class LogInActivity : AppCompatActivity() {
                 }
             }
     }
-
 }
