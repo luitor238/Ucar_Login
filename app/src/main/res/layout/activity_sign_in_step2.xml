@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck">
 
         <!--COPLETE BAR-->
         <View
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:src="@drawable/go_back_button_black"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -48,28 +49,29 @@
                 android:text="@string/step2"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/grey"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="InefficientWeight" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title2"
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
+            android:text="@string/title2"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/subtitle2"
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
+            android:text="@string/subtitle2"
             android:textSize="16sp" />
 
         <!--EMAIL-->
@@ -88,9 +90,10 @@
                 android:drawableStart="@drawable/icon_mail"
                 android:drawablePadding="10dp"
                 android:hint="@string/email"
+                android:importantForAutofill="yes"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/grey"
-                android:importantForAutofill="yes"/>
+                tools:ignore="Autofill,TextContrastCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +113,8 @@
                 android:drawablePadding="10dp"
                 android:hint="@string/phone_number"
                 android:importantForAutofill="no"
-                android:inputType="text" />
+                android:inputType="text"
+                tools:ignore="TextContrastCheck,TextFields" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,11 +123,11 @@
             android:id="@+id/textViewResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/change_preferences"
             android:layout_marginStart="60dp"
             android:layout_marginTop="105dp"
             android:layout_marginEnd="60dp"
-            android:textAlignment="center"/>
+            android:text="@string/change_preferences"
+            android:textAlignment="center" />
 
         <!--NEXT BUTTON-->
         <Button
@@ -142,7 +146,8 @@
             android:textSize="18sp"
             android:textStyle="normal"
             app:cornerRadius="15dp"
-            app:strokeColor="@color/white" />
+            app:strokeColor="@color/white"
+            tools:ignore="TextContrastCheck" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

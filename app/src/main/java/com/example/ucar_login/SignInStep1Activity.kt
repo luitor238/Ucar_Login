@@ -37,7 +37,7 @@ class SignInStep1Activity : AppCompatActivity() {
 
                     if (verificarCriterios(binding.editTextPassword.text.toString())) {
 
-                        val intent = Intent(this, SingInStep2Activity::class.java)
+                        val intent = Intent(this, SignInStep2Activity::class.java)
                         intent.putExtra("Username",binding.editTextUsername.text.toString())
                         intent.putExtra("Password",binding.editTextPassword.text.toString())
                         startActivity(intent)
