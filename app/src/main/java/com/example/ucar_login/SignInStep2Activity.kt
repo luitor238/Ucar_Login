@@ -31,6 +31,8 @@ class SignInStep2Activity : AppCompatActivity() {
         //GO BACK BUTTON
         binding.imageBtnGoBack.setOnClickListener {
             val intent = Intent(this, LogInActivity::class.java)
+            intent.putExtra("Username",username)
+            intent.putExtra("Password",password)
             startActivity(intent)
         }
 
