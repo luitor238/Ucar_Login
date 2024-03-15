@@ -31,9 +31,9 @@ class SignInStep1Activity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
 
 
-            if(binding.editTextPassword.text==binding.editTextRepeatPassword.text){
+            if(binding.editTextPassword.text.toString()==binding.editTextRepeatPassword.text.toString()){
 
-                if(binding.editTextUsername.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
+                if(binding.editTextUsername.text.toString().isNotEmpty() && binding.editTextPassword.text.toString().isNotEmpty()){
 
                     if (verificarCriterios(binding.editTextPassword.text.toString())) {
 

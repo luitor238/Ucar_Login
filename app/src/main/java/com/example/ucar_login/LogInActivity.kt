@@ -3,9 +3,12 @@ package com.example.ucar_login
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager.OnActivityResultListener
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -18,17 +21,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 
+
+
 class LogInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLogInBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var googleSignInClient: GoogleSignInClient
-    private var RC_SIGN_IN = 20
+    private var GOOGLE_SIGN_IN = 100
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_log_in)
 
         binding = ActivityLogInBinding.inflate(layoutInflater)
         val view = binding.root
@@ -37,22 +44,35 @@ class LogInActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         //LOGIN GOOGLE
         binding.btnLoginGoogle.setOnClickListener {
-            googleSignIn()
+          /*  val googleConf =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+            val googleClient = GoogleSignIn.getClient(this, googleConf)
+            startActivityForResult(googleClient.signInIntent,GOOGLE_SIGN_IN)*/
         }
+
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
 
 
         }
+
+        //SING IN MANUAL, registrarse
+        binding.btnSingInManual.setOnClickListener {
+            val intent = Intent(this, SignInStep1Activity::class.java)
+            startActivity(intent)
+
+
+        }
+
+
+    // ---------------------------------- AUTHENTICATION ----------------------------------
         //LOGIN MANUAL
         binding.btnLoginManual.setOnClickListener {
             binding.viewLoginUser.visibility = View.VISIBLE
@@ -73,15 +93,34 @@ class LogInActivity : AppCompatActivity() {
             val animatorSet = AnimatorSet()
             animatorSet.play(scaleX).with(scaleY)
             animatorSet.start()
-        }
-        //SING IN MANUAL
-        binding.btnSingInManual.setOnClickListener {
-            val intent = Intent(this, SignInStep1Activity::class.java)
-            startActivity(intent)
+
+            try {
+                binding.btnLogin.setOnClickListener{
+                    if (binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
+                        auth.signInWithEmailAndPassword(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString()).addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                Log.d(ContentValues.TAG, "Autenticacion del ususario Correcta")
+
+                                val intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
+                            else {
+                                val builder = android.app.AlertDialog.Builder(this)
+                                builder.setTitle("Error")
+                                builder.setMessage("Usuario o Contraseña Incorrecta")
+                                builder.setPositiveButton("Aceptar",null)
+                                val dialog: android.app.AlertDialog = builder.create()
+                                dialog.show()
+                            }
+                        }
+                    }else{ Log.d(ContentValues.TAG, "Debes rellenar los campos") }
+                }
+            } catch (e: Exception) {
+                Log.d(ContentValues.TAG, "Error en la autentificacion del usuario")
+            }
+
         }
 
-
-    // ---------------------------------- AUTHENTICATION ----------------------------------
 
         //GO BACK BUTTON
         binding.imageBtnGoBack.setOnClickListener {
@@ -93,78 +132,50 @@ class LogInActivity : AppCompatActivity() {
             // Iniciar la animación
             fadeOut.start()
         }
-        //LOGIN BUTTON
-        try {
-            binding.btnLogin.setOnClickListener {
-
-                if(binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
-
-                    // Añadir comprobaciones de datos introducidos...............................................................................................
-
-                    auth.signInWithEmailAndPassword(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString())
-                        .addOnCompleteListener(this)
-
-                    //val intent = Intent(this, HomeActivity::class.java)
-                    //startActivity(intent)
-
-                } else {
-                    binding.textViewResult.visibility = View.VISIBLE
-                    binding.textViewResult.text = "There cannot be empty fields."
-                }
-            }
-        }
-        catch (e: Exception) {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Error")
-            builder.setMessage("There is a mistake on the athentication")
-            builder.setPositiveButton("OK",null)
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
-        }
 
         //FORGOT PASSWORD BUTTON
         binding.btnForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
+
     }
 
-    private fun googleSignIn() {
-        val intent = googleSignInClient.signInIntent
-        startActivityForResult(intent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                account?.idToken?.let { firebaseAuth(it) }
-            } catch (e: ApiException) {
-                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun firebaseAuth(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    val map = HashMap<String, Any>()
-                    map["id"] = user!!.uid
-                    map["name"] = user.displayName!!
-                    map["profile"] = user.photoUrl.toString()
-
-                    database.reference.child("users").child(user.uid).setValue(map)
-                    val intent = Intent(this, SignInStep1Activity::class.java)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Algo salió mal", Toast.LENGTH_SHORT).show()
+    /*override fun OnActivityResult(requestCode:Int , resultCode:Int, data: Intent?){
+        super.onActivityResult(requestCode,resultCode,data)
+        if(requestCode == GOOGLE_SIGN_IN) {
+            val task = GoogleSingIn.getSignedInAccountFromIntent(data)
+            try{
+                val account = task.getResoult(ApiException::class.java)
+                if (account != null) {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
                 }
+
+            }catch(e: ApiException){
+                Log.d("TAG", "Error")
+
+
             }
-    }
+
+
+        }
+    }*/
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

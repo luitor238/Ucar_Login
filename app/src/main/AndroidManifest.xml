@@ -32,7 +32,7 @@
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthenticationActivity"
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".LogInActivity"

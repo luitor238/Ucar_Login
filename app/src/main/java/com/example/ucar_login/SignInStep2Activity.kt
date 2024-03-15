@@ -35,18 +35,16 @@ class SignInStep2Activity : AppCompatActivity() {
 
         //NEXT BUTTON
         binding.btnNext.setOnClickListener {
-            if(binding.editTextEmail.text.isNotEmpty()){
-
+            if (binding.editTextEmail.text.isNotEmpty() && binding.editTextEmail.text.contains('@')) {
                 val intent = Intent(this, SignInStep3Activity::class.java)
-                intent.putExtra("Username",username)
-                intent.putExtra("Password",password)
-                intent.putExtra("Email",email)
-                intent.putExtra("PhoneNumber",phoneNumber)
+                intent.putExtra("Username", username)
+                intent.putExtra("Password", password)
+                intent.putExtra("Email", email)
+                intent.putExtra("PhoneNumber", phoneNumber)
                 startActivity(intent)
-
             } else {
-                binding.textViewResult.setTextColor(ContextCompat.getColor(this,R.color.warning))
-                binding.textViewResult.text = "You must put an email."
+                binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
+                binding.textViewResult.text = "You must provide a valid email address."
             }
 
         }

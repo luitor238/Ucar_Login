@@ -21,7 +21,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         //GO BACK BUTTON
         binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this, AuthenticationActivity::class.java)
+            val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
         }
 

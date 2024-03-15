@@ -21,7 +21,6 @@ class SignInStep3Activity : AppCompatActivity() {
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){uri ->
         if(uri!=null){
             binding.imageUser.setImageURI(uri)
-            uria = uri
         }
     }
 
@@ -64,11 +63,11 @@ class SignInStep3Activity : AppCompatActivity() {
 
         //NEXT BUTTON
         binding.btnNext.setOnClickListener {
-            if(name.isNotEmpty()){
-                val uri = uria
+            if(binding.editTextName.text.toString().isNotEmpty()){
+                //val uri = uria
 
                 // Guarda la ruta de la imagen seleccionada
-                val imagePath = getImagePath(uri)
+                //val imagePath = getImagePath(uri)
 
                 // Pasar la ruta de la imagen a la siguiente actividad
                 val intent = Intent(this, SignInStep4Activity::class.java)
@@ -76,7 +75,7 @@ class SignInStep3Activity : AppCompatActivity() {
                 intent.putExtra("Password", password)
                 intent.putExtra("Email", email)
                 intent.putExtra("PhoneNumber", phoneNumber)
-                intent.putExtra("Image", imagePath)
+              //  intent.putExtra("Image", imagePath)
                 intent.putExtra("Name", name)
                 startActivity(intent)
             } else {
@@ -85,11 +84,7 @@ class SignInStep3Activity : AppCompatActivity() {
             }
         }
 
-
-
     }
-
-
 
     //Funcion Abre la camara
     private fun camera(){
@@ -121,34 +116,3 @@ class SignInStep3Activity : AppCompatActivity() {
     }
 }
 
-
-/*
-companion object {
-        private const val REQUEST_CODE_PICK_IMAGE = 1001
-    }
-
-
-val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
-
-
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                val inputStream = contentResolver.openInputStream(uri)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                // Convertir el Bitmap a ByteArray
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val byteArray = stream.toByteArray()
-
-                val intent = Intent(this, OtraActividad::class.java)
-                intent.putExtra("imagen", byteArray)
-                startActivity(intent)
-            }
-        }
-    }*/
