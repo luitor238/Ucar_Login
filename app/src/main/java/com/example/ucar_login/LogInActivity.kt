@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 
@@ -37,25 +39,30 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+      session()
+
+
         binding = ActivityLogInBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
 
 
         //LOGIN GOOGLE
+
         binding.btnLoginGoogle.setOnClickListener {
-          /*  val googleConf =
+            val googleConf =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build()
             val googleClient = GoogleSignIn.getClient(this, googleConf)
-            startActivityForResult(googleClient.signInIntent,GOOGLE_SIGN_IN)*/
+            startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
         }
+
+
 
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
@@ -141,6 +148,42 @@ class LogInActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == GOOGLE_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+
+                if (account != null) {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { signInTask ->
+                        if (signInTask.isSuccessful) {
+                            // El usuario se ha registrado correctamente
+                        } else {
+                            Log.d(ContentValues.TAG, "El usuario no fue registrado. Manejar el error apropiadamente")
+                        }
+                    }
+                }
+            } catch (e: ApiException) {
+                Log.d(ContentValues.TAG, "Error bien gordo")
+            }
+        }
+    }
+    private fun session() {
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val email = prefs.getString("email",null)
+        if(email != null) {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+}
+
+
     /*override fun OnActivityResult(requestCode:Int , resultCode:Int, data: Intent?){
         super.onActivityResult(requestCode,resultCode,data)
         if(requestCode == GOOGLE_SIGN_IN) {
@@ -157,8 +200,10 @@ class LogInActivity : AppCompatActivity() {
 
 
             }
-
-
+//borrado de datos
+     val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+     prefs.clear()
+     prefs.apply()
         }
     }*/
 
@@ -166,7 +211,7 @@ class LogInActivity : AppCompatActivity() {
 
 
 
-}
+
 
 
 
