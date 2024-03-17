@@ -1,9 +1,11 @@
 package com.example.ucar_login
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.ucar_login.databinding.ActivitySignInStep2Binding
 
@@ -23,8 +25,8 @@ class SignInStep2Activity : AppCompatActivity() {
 
         val username = intent.getStringExtra("Username")
         val password = intent.getStringExtra("Password")
-        val email = binding.editTextEmail.text.toString()
-        val phoneNumber = binding.editTextPhoneNumber.text.toString()
+
+
 
 
         //GO BACK BUTTON
@@ -35,12 +37,15 @@ class SignInStep2Activity : AppCompatActivity() {
 
         //NEXT BUTTON
         binding.btnNext.setOnClickListener {
-            if (binding.editTextEmail.text.isNotEmpty() && binding.editTextEmail.text.contains('@')) {
+            val email = binding.editTextEmail.text.toString()
+            if (email != null && email.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                val phoneNumber = binding.editTextPhoneNumber.text.toString()
                 val intent = Intent(this, SignInStep3Activity::class.java)
                 intent.putExtra("Username", username)
                 intent.putExtra("Password", password)
                 intent.putExtra("Email", email)
                 intent.putExtra("PhoneNumber", phoneNumber)
+                Log.d(ContentValues.TAG, "Pasando a la siguiente actividad con la variable: " + email+ " y "+ password)
                 startActivity(intent)
             } else {
                 binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))

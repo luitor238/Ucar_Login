@@ -1,9 +1,11 @@
 package com.example.ucar_login
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.ucar_login.databinding.ActivitySignInStep1Binding
 

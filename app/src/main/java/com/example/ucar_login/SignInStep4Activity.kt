@@ -9,21 +9,28 @@ import android.util.Log
 import android.view.View
 import com.example.ucar_login.databinding.ActivitySignInStep4Binding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 
 class SignInStep4Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep4Binding
     private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_step4)
+
+        Log.d(ContentValues.TAG, "Estoy en la siguietne actividad")
 
 
         binding = ActivitySignInStep4Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        auth = FirebaseAuth.getInstance()
 
 
         val username = intent.getStringExtra("Username")
@@ -32,7 +39,10 @@ class SignInStep4Activity : AppCompatActivity() {
         val phoneNumber = intent.getStringExtra("PhoneNumber")
         val name = intent.getStringExtra("Name")
        // val imagePath = intent.getStringExtra("Image")
-        val bibliography = binding.editTextBibliography.text.toString()
+
+
+
+
 /*
         if (imagePath != null) {
             if (imagePath.isNotEmpty()) {
@@ -58,13 +68,31 @@ class SignInStep4Activity : AppCompatActivity() {
         try {
             binding.btnCreate.setOnClickListener{
                 Log.d(ContentValues.TAG, "Aqui estoy ")
+                if (email != null && password != null ) {
+                    Log.d(ContentValues.TAG, "no es nulo ")
+                        if (email.isNotEmpty() && password.isNotEmpty()) {
+                            Log.d(ContentValues.TAG, "no es vacio ")
 
-                auth.createUserWithEmailAndPassword(email.toString(), password.toString()).addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(ContentValues.TAG, "El usuario registrado correctamente. ")
-                    } else { Log.d(ContentValues.TAG, "El usuario no fue registrado. Manejar el error apropiadamente") }
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
+
+                            auth.createUserWithEmailAndPassword(email.toString(), password.toString()).addOnCompleteListener(this) { task ->
+                                if (task.isSuccessful) {
+                                    val bibliography = binding.editTextBibliography.text.toString()
+                                    Log.d(ContentValues.TAG, "El usuario registrado correctamente. ")
+                                    db.collection("users").document(email).set(
+                                        hashMapOf("usuario" to username,
+                                            "phoneNumber" to phoneNumber,
+                                            "name" to name,
+                                            "bibliography" to bibliography
+                                            )
+                                    )
+                                    val intent = Intent(this, HomeActivity::class.java)
+                                    startActivity(intent)
+                                } else { Log.d(ContentValues.TAG, "El usuario no fue registrado. Manejar el error apropiadamente") }
+
+                            }
+                        }else {Log.d(ContentValues.TAG, "El correo tiene un error de formato") }
+
+
                 }
             }
 
@@ -80,8 +108,7 @@ class SignInStep4Activity : AppCompatActivity() {
 
             // añadir datops recogidos a firebase-----------------------------------------MARCO!!----------------------------------------
 
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+
         }
 
 
