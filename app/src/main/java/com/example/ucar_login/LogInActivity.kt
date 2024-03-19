@@ -1,5 +1,6 @@
 package com.example.ucar_login
 
+import SignInGoogleStep1
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -157,13 +158,8 @@ class LogInActivity : AppCompatActivity() {
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { signInTask ->
                         if (signInTask.isSuccessful) {
-                            val firebaseUser = FirebaseAuth.getInstance().currentUser
-                            val name = firebaseUser?.displayName
-                            val phoneNumber = firebaseUser?.phoneNumber
-
-                            // Puedes utilizar el nombre y el número de teléfono aquí como desees
-                            Log.d(ContentValues.TAG, "Nombre del usuario: $name")
-                            Log.d(ContentValues.TAG, "Número de teléfono del usuario: $phoneNumber")
+                            val intent = Intent(this, SignInGoogleStep1::class.java)
+                            startActivity(intent)
                         } else {
                             Log.d(ContentValues.TAG, "El usuario no fue registrado correctamente.")
                         }

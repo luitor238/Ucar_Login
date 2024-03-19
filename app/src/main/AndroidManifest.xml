@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Ucar_Login"
         tools:targetApi="31">
         <activity
+            android:name=".SingInGoogleStep1"
+            android:exported="false" />
+        <activity
             android:name=".SignInStep4Activity"
             android:exported="false" />
         <activity

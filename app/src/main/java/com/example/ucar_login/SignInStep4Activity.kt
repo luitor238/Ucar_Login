@@ -1,5 +1,4 @@
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +31,7 @@ class SignInStep4Activity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             val bibliography = binding.editTextBibliography.text.toString()
                             Log.d(ContentValues.TAG, "User registered successfully.")
-                            saveUserToDatabase(username, phoneNumber, name, imageUrl, bibliography)
+                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
                         } else {
                             Log.d(ContentValues.TAG, "User registration failed.")
                         }
@@ -45,6 +44,7 @@ class SignInStep4Activity : AppCompatActivity() {
 
     private fun saveUserToDatabase(
         username: String?,
+        email: String?,
         phoneNumber: String?,
         name: String?,
         imageUrl: String?,
@@ -53,7 +53,7 @@ class SignInStep4Activity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
 
-        val user = User(username, phoneNumber, name, imageUrl, bibliography)
+        val user = User(username, email, phoneNumber, name, imageUrl, bibliography)
         uid?.let {
             database.child("users").child(it).setValue(user)
                 .addOnSuccessListener {
@@ -68,6 +68,7 @@ class SignInStep4Activity : AppCompatActivity() {
 
     data class User(
         val username: String?,
+        val email: String?, // Added email field
         val phoneNumber: String?,
         val name: String?,
         val imageUrl: String?,
