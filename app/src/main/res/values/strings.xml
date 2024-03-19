@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">ProyectoFinalGrado</string>
     <string name="prefs_file">com.marcoYLuis.Ucar.PREFERENCE_FILE_KEY</string>
-    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID</string>
+    <string name="default_web_client_id">504424914935-vqhe6pm8n0pvoi7sba368665v0uq5ct6.apps.googleusercontent.com</string>
+
 
     <!--DATA-->
     <string name="username">Username</string>

@@ -1,120 +1,76 @@
-package com.example.ucar_login
-
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.ucar_login.databinding.ActivitySignInStep4Binding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import java.io.File
+import com.google.firebase.database.FirebaseDatabase
 
 class SignInStep4Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep4Binding
     private lateinit var auth: FirebaseAuth
-    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in_step4)
-
-        Log.d(ContentValues.TAG, "Estoy en la siguietne actividad")
-
-
         binding = ActivitySignInStep4Binding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
-
 
         val username = intent.getStringExtra("Username")
         val password = intent.getStringExtra("Password")
         val email = intent.getStringExtra("Email")
         val phoneNumber = intent.getStringExtra("PhoneNumber")
         val name = intent.getStringExtra("Name")
-       // val imagePath = intent.getStringExtra("Image")
+        val imageUrl = intent.getStringExtra("ImageUrl")
 
-
-
-
-/*
-        if (imagePath != null) {
-            if (imagePath.isNotEmpty()) {
-                val imageFile = File(imagePath)
-                if (imageFile.exists()) {
-                    val image = BitmapFactory.decodeFile(imageFile.absolutePath)
-                }
+        binding.btnCreate.setOnClickListener {
+            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                auth.createUserWithEmailAndPassword(email.toString(), password.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val bibliography = binding.editTextBibliography.text.toString()
+                            Log.d(ContentValues.TAG, "User registered successfully.")
+                            saveUserToDatabase(username, phoneNumber, name, imageUrl, bibliography)
+                        } else {
+                            Log.d(ContentValues.TAG, "User registration failed.")
+                        }
+                    }
+            } else {
+                Log.d(ContentValues.TAG, "Email or password is empty.")
             }
-        }*/
-
-        //GO BACK BUTTON
-        binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this, SignInStep3Activity::class.java)
-            intent.putExtra("Username", username)
-            intent.putExtra("Password", password)
-            intent.putExtra("Email", email)
-            intent.putExtra("PhoneNumber", phoneNumber)
-            startActivity(intent)
         }
+    }
 
-        //NEXT BUTTON
+    private fun saveUserToDatabase(
+        username: String?,
+        phoneNumber: String?,
+        name: String?,
+        imageUrl: String?,
+        bibliography: String?
+    ) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = FirebaseDatabase.getInstance().reference
 
-        try {
-            binding.btnCreate.setOnClickListener{
-                Log.d(ContentValues.TAG, "Aqui estoy ")
-                if (email != null && password != null ) {
-                    Log.d(ContentValues.TAG, "no es nulo ")
-                        if (email.isNotEmpty() && password.isNotEmpty()) {
-                            Log.d(ContentValues.TAG, "no es vacio ")
-
-
-                            auth.createUserWithEmailAndPassword(email.toString(), password.toString()).addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    val bibliography = binding.editTextBibliography.text.toString()
-                                    Log.d(ContentValues.TAG, "El usuario registrado correctamente. ")
-                                    db.collection("users").document(email).set(
-                                        hashMapOf("usuario" to username,
-                                            "phoneNumber" to phoneNumber,
-                                            "name" to name,
-                                            "bibliography" to bibliography
-                                            )
-                                    )
-                                    val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-                                    prefs.putString("email",email)
-                                    prefs.apply()
-
-                                    val intent = Intent(this, HomeActivity::class.java)
-                                    startActivity(intent)
-                                } else { Log.d(ContentValues.TAG, "El usuario no fue registrado. Manejar el error apropiadamente") }
-
-                            }
-                        }else {Log.d(ContentValues.TAG, "El correo tiene un error de formato") }
-
-
+        val user = User(username, phoneNumber, name, imageUrl, bibliography)
+        uid?.let {
+            database.child("users").child(it).setValue(user)
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "User data saved successfully.")
+                    // Proceed to next activity or whatever you need to do
                 }
-            }
-
-
-
-
-
-            } catch (e: Exception) {
-                Log.d(ContentValues.TAG, "Error no esperado")
-            }
-
-            //username, password, email, phoneNumber, name, image, bibliography
-
-            // añadir datops recogidos a firebase-----------------------------------------MARCO!!----------------------------------------
-
-
+                .addOnFailureListener { e ->
+                    Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
+                }
         }
+    }
 
-
+    data class User(
+        val username: String?,
+        val phoneNumber: String?,
+        val name: String?,
+        val imageUrl: String?,
+        val bibliography: String?
+    )
 }

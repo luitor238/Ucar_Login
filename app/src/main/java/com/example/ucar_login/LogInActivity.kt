@@ -51,7 +51,6 @@ class LogInActivity : AppCompatActivity() {
 
 
         //LOGIN GOOGLE
-
         binding.btnLoginGoogle.setOnClickListener {
             val googleConf =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -61,8 +60,6 @@ class LogInActivity : AppCompatActivity() {
             val googleClient = GoogleSignIn.getClient(this, googleConf)
             startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
         }
-
-
 
         //LOGIN FACEBOOK
         binding.btnLoginFacebook.setOnClickListener {
@@ -128,7 +125,6 @@ class LogInActivity : AppCompatActivity() {
 
         }
 
-
         //GO BACK BUTTON
         binding.imageBtnGoBack.setOnClickListener {
 
@@ -161,9 +157,15 @@ class LogInActivity : AppCompatActivity() {
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { signInTask ->
                         if (signInTask.isSuccessful) {
-                            // El usuario se ha registrado correctamente
+                            val firebaseUser = FirebaseAuth.getInstance().currentUser
+                            val name = firebaseUser?.displayName
+                            val phoneNumber = firebaseUser?.phoneNumber
+
+                            // Puedes utilizar el nombre y el número de teléfono aquí como desees
+                            Log.d(ContentValues.TAG, "Nombre del usuario: $name")
+                            Log.d(ContentValues.TAG, "Número de teléfono del usuario: $phoneNumber")
                         } else {
-                            Log.d(ContentValues.TAG, "El usuario no fue registrado. Manejar el error apropiadamente")
+                            Log.d(ContentValues.TAG, "El usuario no fue registrado correctamente.")
                         }
                     }
                 }
@@ -181,41 +183,9 @@ class LogInActivity : AppCompatActivity() {
         }
 
     }
+
+
 }
-
-
-    /*override fun OnActivityResult(requestCode:Int , resultCode:Int, data: Intent?){
-        super.onActivityResult(requestCode,resultCode,data)
-        if(requestCode == GOOGLE_SIGN_IN) {
-            val task = GoogleSingIn.getSignedInAccountFromIntent(data)
-            try{
-                val account = task.getResoult(ApiException::class.java)
-                if (account != null) {
-                    val credential = GoogleAuthProvider.getCredential(account.idToken,null)
-                    FirebaseAuth.getInstance().signInWithCredential(credential)
-                }
-
-            }catch(e: ApiException){
-                Log.d("TAG", "Error")
-
-
-            }
-//borrado de datos
-     val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-     prefs.clear()
-     prefs.apply()
-        }
-    }*/
-
-
-
-
-
-
-
-
-
-
 
 
 
